@@ -10,7 +10,7 @@ import EditAddNote from "./EditAddNote";
 const Home = () => {
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
-    isShown: true,
+    isShown: false,
     type: "add",
     data: null
   });
@@ -89,23 +89,28 @@ const Home = () => {
           />
         </div>
 
-        <button className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
+        <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
           <MdAdd className="text-[35px] text-white" />
         </button>
       </div>
 
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={() => {}}
+        onRequestClose={() => { }}
         style={{
-          overlay:{
-            backgroundColor:"rgba(0,0,0,0.2)"
+          overlay: {
+            backgroundColor: "rgba(0,0,0,0.2)"
           }
         }}
         contentLabel=""
-        className={"w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 overflow-scroll"}
+        className={"w-[40%] max-h-3/4 bg-white rounded-md mx-auto mt-14 p-5 "}
       >
-        <EditAddNote/>
+        <EditAddNote
+          type={openAddEditModal?.type}
+          noteData={openAddEditModal?.data}
+          onClose={() => { setOpenAddEditModal({ isShown: false, type: "add", data: null }) }}
+        />
+
       </Modal>
     </>
   )
