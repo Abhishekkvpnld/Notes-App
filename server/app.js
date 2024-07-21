@@ -3,6 +3,7 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 import dbConnection from "./config/databaseConnection.js";
+import authRoute from "./routes/authRoute.js"
 
 
 dotenv.config();
@@ -12,6 +13,9 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({origin:"*"}))
+
+//Routes
+app.use("/api/auth",authRoute);
 
 app.get("/", (req, res) => {
   res.send("server running");
