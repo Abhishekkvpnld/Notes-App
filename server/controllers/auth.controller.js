@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 
+//Register
 export const register = async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -22,17 +23,12 @@ export const register = async (req, res) => {
       password: encryptPassword,
     });
 
-    const userData = await user.save();
-
-    const accessToken = jwt.sign({userData}, process.env.TOKEN_SECRET_KEY, {
-      expiresIn: "2h",
-    });
+    await user.save();
 
     return res.status(200).json({
       success: true,
       error: false,
       message: "Registration successfull🎉🎉",
-      data: { userData: userData, token: accessToken }
     });
   } catch (error) {
     res.status(400).json({
@@ -43,8 +39,32 @@ export const register = async (req, res) => {
   }
 };
 
+//Login
 export const login = async (req, res) => {
   try {
+    const { email, password } = req.body;
+
+    if (!email) throw new Error("Email is required");
+    if (!password) throw new Error("Password is required");
+
+    const userData = await User.findOne({ email });
+    if (!userData) throw new Error("User not found❌");
+
+    const checkPassword = bcrypt.compare(password, userData?.password);
+    if (!checkPassword) throw new Error("Please check password❌");
+
+    const { password: userPassword, ...user } = userData.toObject();
+
+    const accessToken = jwt.sign({ user }, process.env.TOKEN_SECRET_KEY, {
+      expiresIn: "24h",
+    });
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Login successfull✅",
+      data: { user, token: accessToken },
+    });
   } catch (error) {
     res.status(400).json({
       success: false,

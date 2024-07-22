@@ -3,7 +3,8 @@ import morgan from "morgan";
 import dotenv from "dotenv";
 import cors from "cors";
 import dbConnection from "./config/databaseConnection.js";
-import authRoute from "./routes/authRoute.js"
+import authRoute from "./routes/authRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors({origin:"*"}))
 
 //Routes
 app.use("/api/auth",authRoute);
+app.use("/api",userRoute)
 
 app.get("/", (req, res) => {
   res.send("server running");
