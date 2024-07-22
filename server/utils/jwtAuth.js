@@ -17,7 +17,7 @@ export const jwtAuthentication = (req, res, next) => {
     res.status(401).json({
       success: false,
       error: true,
-      data: [],
+      message: error.message,
     });
   }
 };
