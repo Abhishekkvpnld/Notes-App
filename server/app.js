@@ -5,6 +5,7 @@ import cors from "cors";
 import dbConnection from "./config/databaseConnection.js";
 import authRoute from "./routes/authRoute.js";
 import userRoute from "./routes/userRoute.js";
+import cookie from "cookie-parser";
 
 
 dotenv.config();
@@ -14,6 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors({origin:"*"}))
+app.use(cookie());
 
 //Routes
 app.use("/api/auth",authRoute);

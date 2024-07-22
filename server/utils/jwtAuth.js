@@ -2,9 +2,8 @@ import jwt from "jsonwebtoken";
 
 export const jwtAuthentication = (req, res, next) => {
   try {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split("")[1];
-
+    const token = req.cookies.NoteToken;
+    
     if (!token) throw new Error("Authentication failed...❌");
 
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, data) => {

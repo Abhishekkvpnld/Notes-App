@@ -47,10 +47,10 @@ export const login = async (req, res) => {
     if (!email) throw new Error("Email is required");
     if (!password) throw new Error("Password is required");
 
-    const userData = await User.findOne({ email });
+    const userData = await User.findOne({ email: email });
     if (!userData) throw new Error("User not found❌");
 
-    const checkPassword = bcrypt.compare(password, userData?.password);
+    const checkPassword = await bcrypt.compare(password, userData?.password);
     if (!checkPassword) throw new Error("Please check password❌");
 
     const { password: userPassword, ...user } = userData.toObject();
@@ -58,6 +58,14 @@ export const login = async (req, res) => {
     const accessToken = jwt.sign({ user }, process.env.TOKEN_SECRET_KEY, {
       expiresIn: "24h",
     });
+
+   const cookieConfig = {
+      httpOnly: true, 
+      secure: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    }
+
+    res.cookie("NoteToken",accessToken,cookieConfig);
 
     return res.status(200).json({
       success: true,
