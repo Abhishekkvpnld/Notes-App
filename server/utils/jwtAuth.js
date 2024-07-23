@@ -4,10 +4,10 @@ export const jwtAuthentication = (req, res, next) => {
   try {
     const token = req.cookies.NoteToken;
     
-    if (!token) throw new Error("Authentication failed...❌");
+    if (!token) throw new Error("Authentication failed...🔐");
 
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, data) => {
-      if (err) throw new Error("Authentication error❌");
+      if (err) throw new Error("Authentication error🔐");
       req.user = data;
       next();
     });
