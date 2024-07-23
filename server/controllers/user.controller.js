@@ -87,3 +87,58 @@ export const AllNotes = async (req, res) => {
     });
   }
 };
+
+export const deleteNote = async (req, res) => {
+  try {
+    const { user } = req.user;
+    const noteId = req.params.noteId;
+
+    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    if (!note) throw new Error("Note not found");
+
+    await Note.deleteOne({ _id: noteId, userId: user._id });
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      message: "Note deleted successfully✅",
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      error: true,
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const updateNotePinned = async (req, res) => {
+  try {
+    const { user } = req.user;
+    const noteId = req.params.noteId;
+    const { isPinned } = req.body;
+
+    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    if (!note) throw new Error("Note not found");
+
+    if (isPinned === true || isPinned === false)
+      note.isPinned = isPinned || false;
+
+    const updateNote = await note.save();
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      data: updateNote,
+      message: `Note ${updateNote.isPinned ? "Pinned" : "Unpinned"}✅`,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      error: true,
+      success: false,
+      message: error.message,
+    });
+  }
+};
