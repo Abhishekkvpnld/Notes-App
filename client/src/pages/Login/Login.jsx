@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
+import axios from "axios";
+import { BASE_URL } from "../../utils/constants";
 
 
 const Login = () => {
@@ -14,9 +16,10 @@ const Login = () => {
 
     const togglePassword = () => (setShowPassword((prev) => !prev));
 
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
 
         if (!password) {
             setError("Please enter valid password");
@@ -30,8 +33,26 @@ const Login = () => {
 
         setError("");
 
-    }
+        //Login Api Call
+        try {
+            const response = await axios.post(`${BASE_URL}/auth/login`, { email, password });
 
+            if (response?.data && response.data?.data?.token) {
+                const accessToken = response?.data?.data?.token;
+                localStorage.setItem("NoteToken", accessToken);
+                navigate("/");
+            }
+
+        } catch (error) {
+            console.log(error)
+            if (error?.response && error?.response?.data?.message) {
+                setError(error?.response?.data?.message);
+            } else {
+                setError("An unexpected error occurred. Please try again.")
+            }
+        }
+
+    };
 
     return (
         <>
@@ -44,7 +65,7 @@ const Login = () => {
                         <input required value={email} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="input-box" />
 
                         <div className="flex items-center justify-center">
-                            <input  value={password} onChange={(e) => setpassword(e.target.value)} type={showPassword ? "password" : "text"} placeholder="Password" className="input-box" />
+                            <input value={password} onChange={(e) => setpassword(e.target.value)} type={showPassword ? "password" : "text"} placeholder="Password" className="input-box" />
                             <div className="absolute md:ml-[25%] px-3 py-3 rounded-full cursor-pointer hover:bg-slate-100 mb-4 bg-white" onClick={togglePassword}>
                                 {showPassword ? <FaRegEye /> : <FaEyeSlash />}
                             </div>

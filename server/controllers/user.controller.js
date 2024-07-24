@@ -116,7 +116,7 @@ export const deleteNote = async (req, res) => {
 export const updateNotePinned = async (req, res) => {
   try {
     const { user } = req.user;
-    const noteId = req.params.noteId;
+    const noteId = req.params.noteId; 
     const { isPinned } = req.body;
 
     const note = await Note.findOne({ _id: noteId, userId: user._id });

@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import NoteCard from "../../components/Cards/NoteCard";
 import Navbar from "../../components/Navbar/Navbar";
 import { MdAdd } from "react-icons/md";
 import EditAddNote from "./EditAddNote";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
 
 
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
+  const [userInfo, setUserInfo] = useState(null);
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -15,9 +21,32 @@ const Home = () => {
     data: null
   });
 
+
+  const getUserInfo = async () => {
+    try {
+
+      const response = await axiosInstance.get("/auth/get-user");
+      if (response?.data && response?.data?.user) {
+        setUserInfo(response?.data?.user);
+      }
+      console.log(response,"❌❌❌❌❌❌❌❌❌❌❌❌")
+
+    } catch (error) {
+      console.log(error,"❌❌❌❌")
+      if (error?.response?.status === 401) {
+        localStorage.clear();
+        navigate("/login");
+      }
+    }
+  } 
+
+  useEffect(() => {
+    getUserInfo();
+  });
+
   return (
     <>
-      <Navbar />
+      <Navbar userInfo={userInfo} />
 
       <div className="container mx-auto">
 

@@ -59,13 +59,13 @@ export const login = async (req, res) => {
       expiresIn: "24h",
     });
 
-   const cookieConfig = {
-      httpOnly: true, 
-      secure: true,
+    const cookieConfig = {
+      httpOnly: true,
+      // secure: true,
       maxAge: 24 * 60 * 60 * 1000,
-    }
+    };
 
-    res.cookie("NoteToken",accessToken,cookieConfig);
+    res.cookie("NoteToken", accessToken, cookieConfig);
 
     return res.status(200).json({
       success: true,
@@ -75,6 +75,32 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
+      success: false,
+      error: true,
+      message: error.message,
+    });
+  }
+};
+
+export const getUser = async (req, res) => {
+  try {
+    const { user } = req.user;
+
+    const isUser = await User.findById(user._id);
+    if (!isUser) throw new Error("User not found");
+
+    return res.status(200).json({
+      user: {
+        _id: isUser._id,
+        username: isUser.username,
+        email: isUser.email,
+        createdAt: isUser.createdAt,
+      },
+      message: "user info",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
       success: false,
       error: true,
       message: error.message,
