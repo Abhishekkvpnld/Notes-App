@@ -12,9 +12,14 @@ dotenv.config();
 
 const app = express();
 
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+};
+
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(cors({origin:"*"}))
+app.use(cors(corsOptions)); 
 app.use(cookie());
 
 //Routes

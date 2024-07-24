@@ -1,9 +1,12 @@
 import { FaEyeSlash, FaRegEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useState } from "react";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Signup = () => {
+
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -40,6 +43,27 @@ const Signup = () => {
     }
 
     setError("");
+
+    try {
+      const response = await axiosInstance.post(`/auth/register`, { email, password, username });
+
+      if (response?.data && response.data?.error) {
+        setError(response.data.message);
+        return;
+      }
+
+      if (response?.data?.success) {
+        navigate("/login")
+      }
+
+    } catch (error) {
+      console.log(error)
+      if (error?.response && error?.response?.data?.message) {
+        setError(error?.response?.data?.message);
+      } else {
+        setError("An unexpected error occurred. Please try again.")
+      }
+    }
 
   }
 

@@ -10,7 +10,7 @@ export const jwtAuthentication = (req, res, next) => {
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, data) => {
       if (err) throw new Error("Authentication error🔐");
       req.user = data;
-      next();
+      // next();
     });
   } catch (error) {
     console.log(error);

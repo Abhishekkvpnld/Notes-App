@@ -1,6 +1,9 @@
 import { getInitials } from "../../utils/helper";
 
-const ProfileData = ({onLogout}) => {
+const ProfileData = ({onLogout,userInfo}) => {
+    
+    console.log("userInfo",userInfo)
+
     return (
         <>
             <div className="flex items-center justify-between gap-2">

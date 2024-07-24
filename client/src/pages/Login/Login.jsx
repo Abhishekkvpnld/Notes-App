@@ -5,6 +5,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
+import axiosInstance from "../../utils/axiosInstance";
 
 
 const Login = () => {
@@ -35,7 +36,7 @@ const Login = () => {
 
         //Login Api Call
         try {
-            const response = await axios.post(`${BASE_URL}/auth/login`, { email, password });
+            const response = await axiosInstance.post(`/auth/login`, { email, password });
 
             if (response?.data && response.data?.data?.token) {
                 const accessToken = response?.data?.data?.token;
@@ -61,7 +62,7 @@ const Login = () => {
             <div className="flex items-center justify-center mt-28">
                 <div className="rounded border w-96 bg-white px-7 py-10 hover:shadow-lg transition-all">
                     <form onSubmit={handleSubmit} className="">
-                        <h4 className="text-2xl mb-7">Login</h4>
+                        <h4 className="text-2xl font-semibold mb-7">Login</h4>
                         <input required value={email} type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="input-box" />
 
                         <div className="flex items-center justify-center">
