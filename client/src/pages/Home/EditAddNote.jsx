@@ -1,23 +1,53 @@
 import { useState } from "react";
 import TagInput from "../../components/Input/TagInput"
 import { MdClose } from "react-icons/md";
+import axiosInstance from "../../utils/axiosInstance";
 
-const EditAddNote = ({ onClose, noteData, type }) => {
+const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
 
-    const [content, setContent] = useState("");
-    const [tags, setTags] = useState("");
-    const [title, setTitle] = useState("");
+    const [content, setContent] = useState(noteData?.content || "");
+    const [tags, setTags] = useState(noteData?.tags || "");
+    const [title, setTitle] = useState(noteData?.title || "");
     const [error, setError] = useState(null);
 
     //Add notes
     const addNewNotes = async () => {
+        try {
+            const response = await axiosInstance.post("/add-note", { title, content, tags });
 
-    }
+            if (response.data && response.data.success) {
+                getAllNotes();
+                onClose();
+            }
+
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                setError(error?.response?.data?.message)
+            }
+        }
+
+    };
 
     //Edit Notes
     const onEditNote = async () => {
+        try {
+            const noteId = noteData?._id;
+            const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags });
 
-    }
+            if (response.data && response.data.success) {
+                getAllNotes();
+                onClose();
+            }
+
+        } catch (error) {
+            console.log(error);
+            if (error.response) {
+                setError(error?.response?.data?.message)
+            }
+        }
+
+    };
 
 
     const handleAddNotes = () => {
@@ -36,6 +66,16 @@ const EditAddNote = ({ onClose, noteData, type }) => {
             onEditNote();
         } else {
             addNewNotes();
+        }
+    };
+
+
+    //Delete Notes
+    const handleEditNote = async(data)=>{
+        try {
+            
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -83,7 +123,7 @@ const EditAddNote = ({ onClose, noteData, type }) => {
                 )
             }
 
-            <button className="btn-primary font-medium p-3 mt-5" onClick={handleAddNotes}>ADD</button>
+            <button className="btn-primary font-medium p-3 mt-5" onClick={handleAddNotes}>{type === "edit" ? "UPDATE" : "ADD"}</button>
         </div>
     )
 }

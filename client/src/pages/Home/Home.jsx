@@ -14,6 +14,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState(null);
+  const [allNotes, setAllNotes] = useState([]);
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -25,7 +26,7 @@ const Home = () => {
   const getUserInfo = async () => {
     try {
 
-      const response = await axiosInstance.get("/auth/get-user",{withCredentials:true});
+      const response = await axiosInstance.get("/auth/get-user", { withCredentials: true });
       if (response?.data && response?.data?.user) {
         setUserInfo(response?.data?.user);
       }
@@ -36,10 +37,34 @@ const Home = () => {
         navigate("/login");
       }
     }
-  } 
+  };
+
+  const getAllNotes = async () => {
+    try {
+      const response = await axiosInstance.get("/all-notes", { withCredentials: true });
+
+      if (response.data && response.data?.data?.Notes) {
+        setAllNotes()
+        console.log(response.data?.data?.Notes)
+      }
+
+    } catch (error) {
+      console.log("An unexpected error occured.Please try again.");
+    }
+  }
+
+
+  const handleEdit = async()=>{
+    try {
+      setOpenAddEditModal({isShown:true,data:noteDetails,type:"edit"});
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     getUserInfo();
+    getAllNotes();
   });
 
   return (
@@ -49,16 +74,24 @@ const Home = () => {
       <div className="container mx-auto">
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 ">
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
+
+          {
+            allNotes?.map((item, index) => (
+              <NoteCard
+                key={item?._id+index}
+                title={item?.title}
+                date={item?.createdAt}
+                content={item?.content}
+                tags={item?.tags}
+                isPinned={item?.isPinned}
+                handleOnDelete={() => { }}
+                handleOnEdit={() => handleEdit(item)}
+                handleOnPinNote={() => { }}
+              />
+            ))
+          }
+
+
 
           <NoteCard
             title={"Meting on 7 th april"}
@@ -136,6 +169,7 @@ const Home = () => {
           type={openAddEditModal?.type}
           noteData={openAddEditModal?.data}
           onClose={() => { setOpenAddEditModal({ isShown: false, type: "add", data: null }) }}
+          getAllNotes={getAllNotes}
         />
 
       </Modal>
