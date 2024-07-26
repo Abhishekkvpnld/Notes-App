@@ -3,20 +3,28 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "../SearchBar/SearchBar";
 import { useState } from "react";
 
-const Navbar = ({ userInfo }) => {
+
+const Navbar = ({ userInfo, onSearchNote,handleClearSearch }) => {
 
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
 
   const handleSearch = async () => {
-    alert("ok")
-  }
-
+    if (searchValue) {
+      onSearchNote(searchValue);
+    }
+  };
 
   const handleLogout = async () => {
     localStorage.clear();
     navigate("/login")
   };
+
+
+const onClearSearch = ()=>{
+  setSearchValue("");
+  handleClearSearch();
+};
 
   return (
     <div className="bg-white flex items-center justify-between px-6 py-2 drop-shadow">

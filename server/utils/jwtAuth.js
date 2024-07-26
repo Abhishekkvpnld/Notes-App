@@ -3,14 +3,13 @@ import jwt from "jsonwebtoken";
 export const jwtAuthentication = (req, res, next) => {
   try {
     const token = req?.cookies?.NoteToken;
-    console.log("❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌",token)
     
     if (!token) throw new Error("Authentication failed...🔐");
 
     jwt.verify(token, process.env.TOKEN_SECRET_KEY, (err, data) => {
       if (err) throw new Error("Authentication error🔐");
       req.user = data;
-      // next();
+      next();
     });
   } catch (error) {
     console.log(error);

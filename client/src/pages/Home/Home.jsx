@@ -9,13 +9,13 @@ import axiosInstance from "../../utils/axiosInstance";
 import EmptyCard from "../../components/EmptyCard";
 
 
-
 const Home = () => {
 
   const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState(null);
   const [allNotes, setAllNotes] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
 
   const [openAddEditModal, setOpenAddEditModal] = useState({
     isShown: false,
@@ -78,6 +78,42 @@ const Home = () => {
     }
   }
 
+  //Search Notes
+  const handleOnSearch = async (query) => {
+    try {
+      const response = await axiosInstance.get("/search-notes", { params: query, withCredentials: true });
+
+      if (response.data && response.data.data) {
+        setIsSearch(true);
+        setAllNotes(response?.data?.data);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  //Clear Search
+  const handleClearSearch = () => {
+    setIsSearch(false);
+    getAllNotes();
+  };
+
+  //Update Pin Note
+  const handleUpdateIsPinned = async (noteData) => {
+    try {
+      const noteId = noteData?._id;
+      const response = await axiosInstance.put("/update-note-pinned/" + noteId, { isPinned: !noteData.isPinned}, { withCredentials: true });
+
+      if (response.data && response.data.success) {
+          getAllNotes();
+      }
+
+  } catch (error) {
+      console.log(error);
+  }
+  }
+
+
   useEffect(() => {
     getUserInfo();
     getAllNotes();
@@ -85,7 +121,7 @@ const Home = () => {
 
   return (
     <>
-      <Navbar userInfo={userInfo} />
+      <Navbar userInfo={userInfo} onSearchNote={handleOnSearch} handleClearSearch={handleClearSearch} />
 
       <div className="container mx-auto">
 
@@ -101,9 +137,9 @@ const Home = () => {
                   content={item?.content}
                   tags={item?.tags}
                   isPinned={item?.isPinned}
-                  handleOnDelete={() => { }}
+                  handleOnDelete={() => handleDeleteNote(item)}
                   handleOnEdit={() => handleEdit(item)}
-                  handleOnPinNote={() => handleDeleteNote(item)}
+                  handleOnPinNote={() => handleUpdateIsPinned(item)}
                 />
               ))
             }
@@ -164,7 +200,7 @@ const Home = () => {
               handleOnEdit={() => { }}
               handleOnPinNote={() => { }}
             />
-          </div>) : <EmptyCard  handleOnEdit={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })}/>}
+          </div>) : <EmptyCard handleOnEdit={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} isSearch={isSearch} />}
 
         <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
           <MdAdd className="text-[35px] text-white" />

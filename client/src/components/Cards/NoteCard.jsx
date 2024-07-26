@@ -22,7 +22,7 @@ const NoteCard = ({
                     <span className="text-xs text-slate-500">{moment(date).format("Do MMM YYY")}</span>
                 </div>
 
-                <button> {isPinned ? <RiUnpinLine className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"} `} /> : <MdOutlinePushPin className={`icon-btn "text-slate-300"`} />}</button>
+                <button onClick={handleOnPinNote}> {isPinned ? <RiUnpinLine className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"} `} /> : <MdOutlinePushPin className={`icon-btn "text-slate-300"`} />}</button>
             </div>
 
             <p className="text-xs text-slate-600 mt-2">{content?.slice(0, 60)}</p>

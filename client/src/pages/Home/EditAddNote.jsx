@@ -30,7 +30,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     };
 
     //Edit Notes
-    const onEditNote = async () => {
+    const onEditNote = async (noteData) => {
         try {
             const noteId = noteData?._id;
             const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags }, { withCredentials: true });
