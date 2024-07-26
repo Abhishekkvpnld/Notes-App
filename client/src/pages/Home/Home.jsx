@@ -6,6 +6,7 @@ import { MdAdd } from "react-icons/md";
 import EditAddNote from "./EditAddNote";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import EmptyCard from "../../components/EmptyCard";
 
 
 
@@ -51,14 +52,29 @@ const Home = () => {
     } catch (error) {
       console.log("An unexpected error occured.Please try again.");
     }
-  }
+  };
 
-
-  const handleEdit = async()=>{
+  const handleEdit = async (noteDetails) => {
     try {
-      setOpenAddEditModal({isShown:true,data:noteDetails,type:"edit"});
+      setOpenAddEditModal({ isShown: true, data: noteDetails, type: "edit" });
     } catch (error) {
       console.log(error)
+    }
+  };
+
+  //Delete Notes
+  const handleDeleteNote = async (data) => {
+
+    const noteId = data._id;
+    try {
+      const response = await axiosInstance.delete("/delete-note/" + noteId, { withCredentials: true });
+
+      if (response.data && response.data.success) {
+        getAllNotes();
+      }
+
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -73,81 +89,82 @@ const Home = () => {
 
       <div className="container mx-auto">
 
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 ">
+        {allNotes?.length > 0 ?
+          (<div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 mt-8 ">
 
-          {
-            allNotes?.map((item, index) => (
-              <NoteCard
-                key={item?._id+index}
-                title={item?.title}
-                date={item?.createdAt}
-                content={item?.content}
-                tags={item?.tags}
-                isPinned={item?.isPinned}
-                handleOnDelete={() => { }}
-                handleOnEdit={() => handleEdit(item)}
-                handleOnPinNote={() => { }}
-              />
-            ))
-          }
+            {
+              allNotes?.map((item, index) => (
+                <NoteCard
+                  key={item?._id + index}
+                  title={item?.title}
+                  date={item?.createdAt}
+                  content={item?.content}
+                  tags={item?.tags}
+                  isPinned={item?.isPinned}
+                  handleOnDelete={() => { }}
+                  handleOnEdit={() => handleEdit(item)}
+                  handleOnPinNote={() => handleDeleteNote(item)}
+                />
+              ))
+            }
 
 
 
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
+            <NoteCard
+              title={"Meting on 7 th april"}
+              date={"6 APR 2017"}
+              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
+              tags={"#meeting"}
+              isPinned={true}
+              handleOnDelete={() => { }}
+              handleOnEdit={() => { }}
+              handleOnPinNote={() => { }}
+            />
 
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
+            <NoteCard
+              title={"Meting on 7 th april"}
+              date={"6 APR 2017"}
+              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
+              tags={"#meeting"}
+              isPinned={true}
+              handleOnDelete={() => { }}
+              handleOnEdit={() => { }}
+              handleOnPinNote={() => { }}
+            />
 
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
+            <NoteCard
+              title={"Meting on 7 th april"}
+              date={"6 APR 2017"}
+              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
+              tags={"#meeting"}
+              isPinned={true}
+              handleOnDelete={() => { }}
+              handleOnEdit={() => { }}
+              handleOnPinNote={() => { }}
+            />
 
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
+            <NoteCard
+              title={"Meting on 7 th april"}
+              date={"6 APR 2017"}
+              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
+              tags={"#meeting"}
+              isPinned={true}
+              handleOnDelete={() => { }}
+              handleOnEdit={() => { }}
+              handleOnPinNote={() => { }}
+            />
 
-          <NoteCard
-            title={"Meting on 7 th april"}
-            date={"6 APR 2017"}
-            content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-            tags={"#meeting"}
-            isPinned={true}
-            handleOnDelete={() => { }}
-            handleOnEdit={() => { }}
-            handleOnPinNote={() => { }}
-          />
-        </div>
+            <NoteCard
+              title={"Meting on 7 th april"}
+              date={"6 APR 2017"}
+              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
+              tags={"#meeting"}
+              isPinned={true}
+              handleOnDelete={() => { }}
+              handleOnEdit={() => { }}
+              handleOnPinNote={() => { }}
+            />
+          </div>) : <EmptyCard  handleOnEdit={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })}/>}
 
         <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
           <MdAdd className="text-[35px] text-white" />

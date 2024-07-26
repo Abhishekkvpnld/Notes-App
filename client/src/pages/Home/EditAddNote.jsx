@@ -13,7 +13,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     //Add notes
     const addNewNotes = async () => {
         try {
-            const response = await axiosInstance.post("/add-note", { title, content, tags });
+            const response = await axiosInstance.post("/add-note", { title, content, tags }, { withCredentials: true });
 
             if (response.data && response.data.success) {
                 getAllNotes();
@@ -33,7 +33,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     const onEditNote = async () => {
         try {
             const noteId = noteData?._id;
-            const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags });
+            const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags }, { withCredentials: true });
 
             if (response.data && response.data.success) {
                 getAllNotes();
@@ -69,15 +69,6 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
         }
     };
 
-
-    //Delete Notes
-    const handleEditNote = async(data)=>{
-        try {
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     return (
         <div className="relative">

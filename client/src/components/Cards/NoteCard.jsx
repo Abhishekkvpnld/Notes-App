@@ -22,17 +22,17 @@ const NoteCard = ({
                     <span className="text-xs text-slate-500">{moment(date).format("Do MMM YYY")}</span>
                 </div>
 
-                {isPinned ? <RiUnpinLine className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"} `} /> : <MdOutlinePushPin className={`icon-btn "text-slate-300"`} />}
+                <button> {isPinned ? <RiUnpinLine className={`icon-btn ${isPinned ? "text-primary" : "text-slate-300"} `} /> : <MdOutlinePushPin className={`icon-btn "text-slate-300"`} />}</button>
             </div>
 
             <p className="text-xs text-slate-600 mt-2">{content?.slice(0, 60)}</p>
 
             <div className="flex items-center justify-between mt-2">
-                <div className="text-xs text-slate-500">{tags?.map((tag)=>`#${tag}`)}</div>
+                {/* <div className="text-xs text-slate-500">{tags?.map((tag) => `#${tag}`)}</div> */}
 
                 <div className="flex items-center gap-2">
-                    <MdOutlineCreate className="icon-btn hover:text-green-600" />
-                    <MdDeleteOutline className="icon-btn hover:text-red-700" />
+                    <MdOutlineCreate className="icon-btn hover:text-green-600" onClick={handleOnEdit} />
+                    <MdDeleteOutline className="icon-btn hover:text-red-700" onClick={handleOnDelete} />
                 </div>
             </div>
 

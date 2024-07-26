@@ -9,5 +9,7 @@ router.post("/add-note",jwtAuthentication,addNotes);
 router.put("/edit-note/:noteId",jwtAuthentication,editNote);
 router.delete("/delete-note/:noteId",jwtAuthentication,deleteNote);
 router.put("/update-note-pinned/:noteId",jwtAuthentication,updateNotePinned);
+router.get("/search-notes/",jwtAuthentication,updateNotePinned);
+
 
 export default router;
