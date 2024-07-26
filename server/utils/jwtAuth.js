@@ -2,7 +2,9 @@ import jwt from "jsonwebtoken";
 
 export const jwtAuthentication = (req, res, next) => {
   try {
-    const token = req?.cookies?.NoteToken;
+    const token = req.cookies?.NoteCookieToken;
+    // console.log("🔐🔐🔐🔐🔐🔐🔐🔐🔐",token)
+
     
     if (!token) throw new Error("Authentication failed...🔐");
 
@@ -12,7 +14,7 @@ export const jwtAuthentication = (req, res, next) => {
       next();
     });
   } catch (error) {
-    console.log(error);
+    console.error('Authentication error:', error.message);
     res.status(401).json({
       success: false,
       error: true,

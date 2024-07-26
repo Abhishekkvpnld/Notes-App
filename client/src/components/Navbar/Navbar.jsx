@@ -33,7 +33,7 @@ const onClearSearch = ()=>{
       <SearchBar
         handleOnChange={(e) => setSearchValue(e.target.value)}
         handleSearch={handleSearch}
-        onClearSearch={() => setSearchValue("")}
+        onClearSearch={() => onClearSearch()}
         value={searchValue}
       />
 

@@ -13,7 +13,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     //Add notes
     const addNewNotes = async () => {
         try {
-            const response = await axiosInstance.post("/add-note", { title, content, tags }, { withCredentials: true });
+            const response = await axiosInstance.post("/add-note", { title, content, tags });
 
             if (response.data && response.data.success) {
                 getAllNotes();
@@ -33,7 +33,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     const onEditNote = async (noteData) => {
         try {
             const noteId = noteData?._id;
-            const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags }, { withCredentials: true });
+            const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags });
 
             if (response.data && response.data.success) {
                 getAllNotes();
@@ -84,7 +84,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
                     className="text-2xl text-slate-900 outline-none"
                     placeholder="Add notes"
                     value={title}
-                    onChange={(e) => setTitle(e.target)}
+                    onChange={(e) => setTitle(e.target.value)}
                 />
             </div>
 

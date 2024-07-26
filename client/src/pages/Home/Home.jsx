@@ -27,8 +27,8 @@ const Home = () => {
   const getUserInfo = async () => {
     try {
 
-      const response = await axiosInstance.get("/auth/get-user", { withCredentials: true });
-      if (response?.data && response?.data?.user) {
+      const response = await axiosInstance.get("auth/get-user");
+      if (response?.data) {
         setUserInfo(response?.data?.user);
       }
 
@@ -36,17 +36,17 @@ const Home = () => {
       if (error?.response?.status === 401) {
         localStorage.clear();
         navigate("/login");
+        console.log(error)
       }
     }
   };
 
   const getAllNotes = async () => {
     try {
-      const response = await axiosInstance.get("/all-notes", { withCredentials: true });
+      const response = await axiosInstance.get("/all-notes");
 
-      if (response.data && response.data?.data?.Notes) {
-        setAllNotes()
-        console.log(response.data?.data?.Notes)
+      if (response.data && response.data?.data) {
+        setAllNotes(response?.data?.data);
       }
 
     } catch (error) {
@@ -67,7 +67,7 @@ const Home = () => {
 
     const noteId = data._id;
     try {
-      const response = await axiosInstance.delete("/delete-note/" + noteId, { withCredentials: true });
+      const response = await axiosInstance.delete("/delete-note/" + noteId);
 
       if (response.data && response.data.success) {
         getAllNotes();
@@ -81,7 +81,7 @@ const Home = () => {
   //Search Notes
   const handleOnSearch = async (query) => {
     try {
-      const response = await axiosInstance.get("/search-notes", { params: query, withCredentials: true });
+      const response = await axiosInstance.get("/search-notes", { params: query});
 
       if (response.data && response.data.data) {
         setIsSearch(true);
@@ -102,7 +102,7 @@ const Home = () => {
   const handleUpdateIsPinned = async (noteData) => {
     try {
       const noteId = noteData?._id;
-      const response = await axiosInstance.put("/update-note-pinned/" + noteId, { isPinned: !noteData.isPinned}, { withCredentials: true });
+      const response = await axiosInstance.put("/update-note-pinned/" + noteId, { isPinned: !noteData.isPinned});
 
       if (response.data && response.data.success) {
           getAllNotes();
@@ -117,7 +117,7 @@ const Home = () => {
   useEffect(() => {
     getUserInfo();
     getAllNotes();
-  });
+  },[]);
 
   return (
     <>
@@ -144,62 +144,6 @@ const Home = () => {
               ))
             }
 
-
-
-            <NoteCard
-              title={"Meting on 7 th april"}
-              date={"6 APR 2017"}
-              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-              tags={"#meeting"}
-              isPinned={true}
-              handleOnDelete={() => { }}
-              handleOnEdit={() => { }}
-              handleOnPinNote={() => { }}
-            />
-
-            <NoteCard
-              title={"Meting on 7 th april"}
-              date={"6 APR 2017"}
-              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-              tags={"#meeting"}
-              isPinned={true}
-              handleOnDelete={() => { }}
-              handleOnEdit={() => { }}
-              handleOnPinNote={() => { }}
-            />
-
-            <NoteCard
-              title={"Meting on 7 th april"}
-              date={"6 APR 2017"}
-              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-              tags={"#meeting"}
-              isPinned={true}
-              handleOnDelete={() => { }}
-              handleOnEdit={() => { }}
-              handleOnPinNote={() => { }}
-            />
-
-            <NoteCard
-              title={"Meting on 7 th april"}
-              date={"6 APR 2017"}
-              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-              tags={"#meeting"}
-              isPinned={true}
-              handleOnDelete={() => { }}
-              handleOnEdit={() => { }}
-              handleOnPinNote={() => { }}
-            />
-
-            <NoteCard
-              title={"Meting on 7 th april"}
-              date={"6 APR 2017"}
-              content={"Meting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th aprilMeting on 7 th april"}
-              tags={"#meeting"}
-              isPinned={true}
-              handleOnDelete={() => { }}
-              handleOnEdit={() => { }}
-              handleOnPinNote={() => { }}
-            />
           </div>) : <EmptyCard handleOnEdit={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} isSearch={isSearch} />}
 
         <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
@@ -209,7 +153,7 @@ const Home = () => {
 
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={() => { }}
+        onRequestClose={openAddEditModal.isShown === false}
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.2)"

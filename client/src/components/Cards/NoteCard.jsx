@@ -13,6 +13,7 @@ const NoteCard = ({
     handleOnDelete,
     handleOnPinNote
 }) => {
+    console.log("tags",tags)
     return (
         <div className="border bg-white rounded-md hover:shadow-xl p-4 transition-all ease-out">
 
@@ -28,7 +29,11 @@ const NoteCard = ({
             <p className="text-xs text-slate-600 mt-2">{content?.slice(0, 60)}</p>
 
             <div className="flex items-center justify-between mt-2">
-                {/* <div className="text-xs text-slate-500">{tags?.map((tag) => `#${tag}`)}</div> */}
+                <div className="text-xs text-slate-500">
+                    {tags?.map((tag, index) => (
+                        <span key={index}>#{tag} </span>
+                    ))}
+                </div>
 
                 <div className="flex items-center gap-2">
                     <MdOutlineCreate className="icon-btn hover:text-green-600" onClick={handleOnEdit} />

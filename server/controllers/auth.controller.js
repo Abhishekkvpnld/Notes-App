@@ -48,10 +48,10 @@ export const login = async (req, res) => {
     if (!password) throw new Error("Password is required");
 
     const userData = await User.findOne({ email: email });
-    if (!userData) throw new Error("User not found❌");
+    if (!userData) throw new Error("User not found");
 
     const checkPassword = await bcrypt.compare(password, userData?.password);
-    if (!checkPassword) throw new Error("Please check password❌");
+    if (!checkPassword) throw new Error("Please check password");
 
     const { password: userPassword, ...user } = userData.toObject();
 
@@ -61,18 +61,19 @@ export const login = async (req, res) => {
 
     const cookieConfig = {
       httpOnly: true,
-      // secure: true,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 24 * 60 * 60 * 1000,
     };
 
-    res.cookie("NoteToken", accessToken, cookieConfig);
-
-    return res.status(200).json({
-      success: true,
-      error: false,
-      message: "Login successfull✅",
-      data: { user, token: accessToken },
-    });
+    return res
+      .cookie("NoteCookieToken", accessToken, cookieConfig)
+      .status(200)
+      .json({
+        success: true,
+        error: false,
+        message: "Login successful✅",
+        data: { user, token: accessToken },
+      });
   } catch (error) {
     res.status(400).json({
       success: false,

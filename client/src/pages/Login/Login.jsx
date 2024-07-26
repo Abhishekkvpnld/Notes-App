@@ -3,8 +3,6 @@ import Navbar from "../../components/Navbar/Navbar";
 import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import axios from "axios";
-import { BASE_URL } from "../../utils/constants";
 import axiosInstance from "../../utils/axiosInstance";
 
 
@@ -12,8 +10,8 @@ const Login = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setpassword] = useState("");
+    const [email, setEmail] = useState("abhishek@gmail.com");
+    const [password, setpassword] = useState("123456");
 
     const togglePassword = () => (setShowPassword((prev) => !prev));
 

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Note from "../models/noteModel.js";
 
 export const addNotes = async (req, res) => {
@@ -33,13 +34,14 @@ export const addNotes = async (req, res) => {
 
 export const editNote = async (req, res) => {
   try {
-    const noteId = req.params.noteId;
+    const NoteId = req?.params?.noteId;
     const { title, content, tags, isPinned } = req.body;
     const { user } = req.user;
 
+    if (!mongoose.Types.ObjectId.isValid(NoteId)) throw new Error("Invalid Note ID");
     if (!title && !content && !tags) throw new Error("No changes provided");
 
-    const note = await Note.findOne({ _id: noteId, userId: user._id });
+    const note = await Note.findOne({ _id: NoteId, userId: user._id });
     if (!note) throw new Error("Note not found");
 
     if (title) note.title = title;
@@ -71,7 +73,6 @@ export const AllNotes = async (req, res) => {
     const userId = user._id;
 
     const Notes = await Note.find({ userId: userId }).sort({ isPinned: -1 });
-
     return res.status(200).json({
       success: true,
       error: false,
