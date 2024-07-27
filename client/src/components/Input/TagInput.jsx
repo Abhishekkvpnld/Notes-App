@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { MdAdd, MdClose } from "react-icons/md";
 
 const TagInput = ({ tags, setTags }) => {
@@ -10,18 +11,23 @@ const TagInput = ({ tags, setTags }) => {
       setTags([...tags, inputValue.trim()]);
       setInputValue("");
     }
-  }
-
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       addNewTag();
     }
-  }
+  };
 
-  const handleRemoveTag = () => {
-
-  }
+  const handleRemoveTag = (i) => {
+    setTags((prevTags) => {
+      if (i >= 0 && i < prevTags.length) {
+        return prevTags.filter((_, index) => index !== i);
+      }
+      return prevTags;
+    });
+  };
+  
 
   return (
     <div>
@@ -35,7 +41,7 @@ const TagInput = ({ tags, setTags }) => {
                 <button onClick={() => {
                   handleRemoveTag(tag)
                 }}>
-                  <MdClose  className="hover:text-black text-slate-500 ml-1"/>
+                  <MdClose onClick={(e)=>handleRemoveTag(index)}  className="hover:text-black text-slate-500 ml-1"/>
                 </button>
               </span>
             ))

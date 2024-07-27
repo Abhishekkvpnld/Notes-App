@@ -2,6 +2,7 @@ import { useState } from "react";
 import TagInput from "../../components/Input/TagInput"
 import { MdClose } from "react-icons/md";
 import axiosInstance from "../../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
 
@@ -16,6 +17,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
             const response = await axiosInstance.post("/add-note", { title, content, tags });
 
             if (response.data && response.data.success) {
+                toast.success(response?.data?.message)
                 getAllNotes();
                 onClose();
             }
@@ -23,6 +25,7 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
         } catch (error) {
             console.log(error);
             if (error.response) {
+                toast.error(error?.response?.data?.message)
                 setError(error?.response?.data?.message)
             }
         }
@@ -30,12 +33,13 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
     };
 
     //Edit Notes
-    const onEditNote = async (noteData) => {
+    const onEditNote = async () => {
         try {
             const noteId = noteData?._id;
             const response = await axiosInstance.put("/edit-note/" + noteId, { title, content, tags });
 
             if (response.data && response.data.success) {
+                toast.success(response?.data?.message)
                 getAllNotes();
                 onClose();
             }
@@ -43,12 +47,12 @@ const EditAddNote = ({ onClose, noteData, type, getAllNotes }) => {
         } catch (error) {
             console.log(error);
             if (error.response) {
+                toast.error(error?.response?.data?.message);
                 setError(error?.response?.data?.message)
             }
         }
 
     };
-
 
     const handleAddNotes = () => {
 

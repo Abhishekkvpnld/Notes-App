@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Navbar";
 import { useState } from "react";
 import axiosInstance from "../../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 const Signup = () => {
 
@@ -53,19 +54,21 @@ const Signup = () => {
       }
 
       if (response?.data?.success) {
+        toast.success(response?.data?.message);
         navigate("/login")
       }
 
     } catch (error) {
       console.log(error)
       if (error?.response && error?.response?.data?.message) {
+        toast.error(error?.response?.data?.message);
         setError(error?.response?.data?.message);
       } else {
         setError("An unexpected error occurred. Please try again.")
       }
     }
 
-  }
+  };
 
 
   return (

@@ -80,20 +80,22 @@ const Home = () => {
 
   //Search Notes
   const handleOnSearch = async (query) => {
-    try {
-      const response = await axiosInstance.get("/search-notes", { params: query});
 
-      if (response.data && response.data.data) {
+    const searchNote = {query}
+    try {
+      const response = await axiosInstance.get("/search-notes", { params: searchNote});
+
+      if (response?.data && response?.data?.data) {
         setIsSearch(true);
         setAllNotes(response?.data?.data);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
   //Clear Search
-  const handleClearSearch = () => {
+  const handleClearSearch = async() => {
     setIsSearch(false);
     getAllNotes();
   };
@@ -146,14 +148,13 @@ const Home = () => {
 
           </div>) : <EmptyCard handleOnEdit={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} isSearch={isSearch} />}
 
-        <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className="w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 absolute right-10 bottom-10">
+        <button onClick={() => setOpenAddEditModal({ isShown: true, type: "add", data: null })} className=" w-14 h-14 flex items-center justify-center rounded-2xl bg-blue-700 hover:bg-blue-800 fixed right-5 bottom-10">
           <MdAdd className="text-[35px] text-white" />
         </button>
       </div>
 
       <Modal
         isOpen={openAddEditModal.isShown}
-        onRequestClose={openAddEditModal.isShown === false}
         style={{
           overlay: {
             backgroundColor: "rgba(0,0,0,0.2)"

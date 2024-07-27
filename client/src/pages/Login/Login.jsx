@@ -4,6 +4,7 @@ import { useState } from "react";
 import { FaRegEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import axiosInstance from "../../utils/axiosInstance";
+import toast from "react-hot-toast";
 
 
 const Login = () => {
@@ -39,6 +40,7 @@ const Login = () => {
             if (response?.data && response.data?.data?.token) {
                 const accessToken = response?.data?.data?.token;
                 localStorage.setItem("NoteToken", accessToken);
+                toast.success(response?.data?.message);
                 navigate("/");
             }
 
@@ -46,6 +48,7 @@ const Login = () => {
             console.log(error)
             if (error?.response && error?.response?.data?.message) {
                 setError(error?.response?.data?.message);
+                toast.error(error?.response?.data?.message);
             } else {
                 setError("An unexpected error occurred. Please try again.")
             }

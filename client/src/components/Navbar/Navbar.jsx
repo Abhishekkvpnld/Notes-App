@@ -9,6 +9,7 @@ const Navbar = ({ userInfo, onSearchNote,handleClearSearch }) => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
 
+
   const handleSearch = async () => {
     if (searchValue) {
       onSearchNote(searchValue);

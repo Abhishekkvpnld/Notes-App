@@ -13,7 +13,7 @@ const NoteCard = ({
     handleOnDelete,
     handleOnPinNote
 }) => {
-    console.log("tags",tags)
+
     return (
         <div className="border bg-white rounded-md hover:shadow-xl p-4 transition-all ease-out">
 
