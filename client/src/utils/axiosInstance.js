@@ -4,7 +4,6 @@ import { BASE_URL } from "./constants.js";
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true, // Ensures cookies are sent with requests
-  timeout: 10000,
   method: "GET,POST,DELETE,PUT",
   headers: {
     "Content-Type": "application/json",
