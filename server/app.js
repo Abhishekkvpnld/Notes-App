@@ -17,6 +17,7 @@ const corsOptions = {
   credentials: true,
 };
 
+//Middle Wares
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors(corsOptions)); 

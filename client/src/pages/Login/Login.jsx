@@ -37,7 +37,7 @@ const Login = () => {
         try {
             const response = await axiosInstance.post(`/auth/login`, { email, password });
 
-            if (response?.data && response.data?.data?.token) {
+            if (response.data?.data?.token) {
                 const accessToken = response?.data?.data?.token;
                 localStorage.setItem("NoteToken", accessToken);
                 toast.success(response?.data?.message);

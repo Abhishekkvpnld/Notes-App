@@ -27,13 +27,14 @@ const Home = () => {
   const getUserInfo = async () => {
     try {
 
-      const response = await axiosInstance.get("auth/get-user");
+      const response = await axiosInstance.get("/auth/get-user");
       if (response?.data) {
         setUserInfo(response?.data?.user);
       }
 
     } catch (error) {
       if (error?.response?.status === 401) {
+        console.log(error.response.status)
         localStorage.clear();
         navigate("/login");
         console.log(error)

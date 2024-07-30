@@ -43,7 +43,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+console.log(email)
     if (!email) throw new Error("Email is required");
     if (!password) throw new Error("Password is required");
 
